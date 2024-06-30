@@ -142,7 +142,7 @@ embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-
 def initialize_models():
     # Load language model
 
-    llm = CTransformers(model="D:/PROJECTS/MediBotIQ/model/llama-2-7b-chat.ggmlv3.q4_0.bin", model_type="llama", config={'max_new_tokens': 1024, 'temperature': 1})
+    llm = CTransformers(model="model/llama-2-7b-chat.ggmlv3.q4_0.bin", model_type="llama", config={'max_new_tokens': 1024, 'temperature': 1})
 
 
     # Initialize Pinecone index
