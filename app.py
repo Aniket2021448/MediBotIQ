@@ -109,6 +109,7 @@
 
 
 
+import os
 import time
 import dotenv
 import streamlit as st
@@ -132,12 +133,14 @@ st.set_page_config(page_title="Medical Chatbot", page_icon=":bot:")
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-PINECONE_API_KEY = "1bae0d8e-019e-4e87-8080-ecf523e5f25f"
+PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+HUGGING_FACE_TOKEN = os.getenv("HUGGING_FACE_TOKEN")
 
 # Cache models and vector store initialization
 @st.cache_resource
 def initialize_models():
     # Load language model
+
     llm = CTransformers(
         model="model/llama-2-7b-chat.ggmlv3.q4_0.bin",
         model_type="llama",
