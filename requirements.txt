@@ -6,7 +6,7 @@ pinecone
 langchain
 flask
 pypdf
-langchain_pinecone
+langchain-pinecone
 streamlit
-langchain_community
+langchain-community
 python-dotenv
