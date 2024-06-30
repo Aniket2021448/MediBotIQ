@@ -1,7 +1,12 @@
 ctransformers
 sentence-transformers
 pinecone-client
+langchain-huggingface
+pinecone
 langchain
 flask
 pypdf
 langchain_pinecone
+streamlit
+langchain_community
+python-dotenv
