@@ -44,7 +44,7 @@ def get_response(user_query):
     PROMPT = PromptTemplate(template = prompt_template, input_variables=["context", "question"])
     chain_type_kwargs = {"prompt":PROMPT}
 
-    llm = CTransformers(model="model/llama-2-7b-chat.ggmlv3.q4_0.bin", model_type="llama", config={'max_new_tokens': 1024, 'temperature': 1})
+    llm = CTransformers(model="https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/tree/main", model_type="llama", config={'max_new_tokens': 1024, 'temperature': 1})
     
     index_name = "medical-chatbot"
     index=pinecone.Index(api_key=PINECONE_API_KEY, host="https://medical-chatbot-pv4ded8.svc.aped-4627-b74a.pinecone.io")
