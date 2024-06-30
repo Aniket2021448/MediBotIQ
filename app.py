@@ -137,6 +137,7 @@ PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 HUGGING_FACE_TOKEN = os.getenv("HUGGING_FACE_TOKEN")
 
 # Cache models and vector store initialization
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 @st.cache_resource
 def initialize_models():
     # Load language model
@@ -151,7 +152,6 @@ def initialize_models():
     index = pinecone.Index(api_key=PINECONE_API_KEY, host="https://medical-chatbot-pv4ded8.svc.aped-4627-b74a.pinecone.io")
 
     # Initialize embeddings
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
     # Create Pinecone retriever
     vector_store = Pinecone(index, embeddings, text_key="text")
