@@ -8,16 +8,19 @@ from langchain_core.messages import HumanMessage, AIMessage
 from dotenv import load_dotenv
 
 
-from langchain import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain.chains import RetrievalQA
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import Pinecone
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import Pinecone
+
 
 import pinecone
-from langchain.document_loaders import PyPDFLoader, DirectoryLoader
+from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
+
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.prompts import PromptTemplate
-from langchain.llms import CTransformers
+from langchain_community.llms import CTransformers
+
 
 
 load_dotenv()
@@ -25,6 +28,7 @@ st.set_page_config(page_title= "Medical chatbot", page_icon=":bot:")
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
+
 
 PINECONE_API_KEY = "1bae0d8e-019e-4e87-8080-ecf523e5f25f"
 def get_response(user_query):
@@ -61,17 +65,64 @@ def get_response(user_query):
     # answer = vector_store.similarity_search(user_query, k=3)
     # return answer.stream().get("answer")
 
-# Function to simulate typing effect
-def type_effect(text):
-    for char in text:
-        st.write(char)
-        time.sleep(0.05)
-    st.write("")
 
-    
-st.title("Medical chatbot")
+
+# Sidebar content
+with st.sidebar:
+    st.title('🤖 Medical Chatbot Project')
+    st.markdown("""
+    Welcome to our Medical Chatbot project, an AI-powered application designed to assist users with their medical queries through intelligent interactions.
+    """)
+    st.header('⚠️ Disclaimer:')
+    st.markdown("""
+    **Note**: This chatbot provides general medical info and is not a substitute for professional medical advice. Always consult your doctor for any health concerns. Do not delay seeking medical advice because of information from this app.
+    """)
+
+    st.header('🔑 Key Features:')
+    st.markdown("""
+    - 👉**Custom LLM Model**: Utilizes a custom Large Language Model hosted on Hugging Face for tailored medical responses.
+    - 👉**Hugging Face Integration**: Secure access using Hugging Face credentials for model authentication.
+    - 👉**Streamlit Interface**: User-friendly and intuitive interface built with Streamlit.
+    - 👉**LangChain for Prompt Management**: Ensures precise and contextually appropriate responses by managing prompts and chat history.
+    - 👉**Pinecone for Vector Storage**: Efficient vector storage and retrieval for quick access to relevant information.
+    """)
+
+    st.header('🚀 Future Enhancements:')
+    st.markdown("""
+    - **Real-time Model Loading**: On-demand model loading with progress indicators.
+    - **Enhanced Medical Knowledge Base**: Continuous updates to keep the model current with the latest medical information.
+    """)
+
+    st.header(':building_construction: View Other projects')
+    st.markdown("""
+    - 👉Github: https://github.com/Aniket2021448/
+    - 👉Portfolio: https://aniket2021448.github.io/My-portfolio/ 
+    """)
+
+    st.header('🤗💬 Contact the developer')
+    st.markdown("""
+    - 👉Email: aniketpanchal1257@gmail.com
+    - 👉Portfolio: https://aniket2021448.github.io/My-portfolio/ 
+    """)
+
+
+st.title("Medical chatbot 🤖")
 
 st.write("Welcome to the medical chatbot. Please enter your symptoms below and I will try to help you.")
+st.write("It works, Just for a while, Because of free tier specifications It is slow.")
+st.write("Thanks for your time :sparkling_heart:")
+
+if "messages" not in st.session_state.keys():
+    st.session_state.chat_history.append({"bot": "How may I help you?"})
+
+if "chat_history" in st.session_state:
+    for message in st.session_state.chat_history:
+        if "bot" in message:
+            with st.chat_message("AI"):
+                st.markdown(message["bot"])
+
+
+st.session_state.chat_history = []
 
 if "chat_history" in st.session_state:
     for message in st.session_state.chat_history:
@@ -82,6 +133,8 @@ if "chat_history" in st.session_state:
             with st.chat_message("AI"):
                 st.markdown(message["bot"])
 
+
+
 user_query = st.chat_input("Enter your symptoms here")
 if user_query is not None and user_query != "":
 
@@ -91,22 +144,13 @@ if user_query is not None and user_query != "":
         st.session_state.chat_history.append({"user": user_query})
 
     with st.chat_message("AI"):
-        # =""
-        # for message in st.session_state.chat_history:
-        #     if "user" in message:
-        #        += f"User: {message['user']}\n"
-        #     elif "bot" in message:
-        #        += f"Bot: {message['bot']}\n"
 
-        ai_response = get_response(user_query)
-        # st.write(type(ai_response))
-        result = ai_response["result"]
-        # type_effect(result)
-        st.markdown(result)
-
-        # Get the response from backend and present it here
-        st.session_state.chat_history.append({"bot": result})
-
+        with st.spinner("Thinking..."):
+            ai_response = get_response(user_query)
+            result = ai_response["result"]
+            
+            st.markdown(result)
+            st.session_state.chat_history.append({"bot": result})
 
 
 # import os
